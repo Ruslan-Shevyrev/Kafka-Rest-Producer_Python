@@ -1,11 +1,19 @@
 import uvicorn
 import json
 import os
-from fastapi import BackgroundTasks, FastAPI, Body
+from fastapi import FastAPI, Body
 from fastapi.responses import JSONResponse
 from kafka import KafkaProducer
 
-KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
+try:
+    KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
+except KeyError:
+    KAFKA_BOOTSTRAP_SERVER = ''
+
+try:
+    UVICORN_HOST = os.environ["UVICORN_HOST"]
+except KeyError:
+    UVICORN_HOST = '127.0.0.1'
 
 app = FastAPI()
 
@@ -30,4 +38,4 @@ async def message(data=Body()):
         return JSONResponse(status_code=501,
                             content={"error": str(e)})
 
-uvicorn.run(app, host="127.0.0.1", port=8000)
+uvicorn.run(app, host=UVICORN_HOST, port=8000)
