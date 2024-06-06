@@ -5,8 +5,7 @@ from fastapi import BackgroundTasks, FastAPI, Body
 from fastapi.responses import JSONResponse
 from kafka import KafkaProducer
 
-KAFKA_BOOTSTRAP_SERVER = 'oraapex-draft:9092'
-# KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
+KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
 
 app = FastAPI()
 
