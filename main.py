@@ -4,11 +4,12 @@ import os
 from fastapi import BackgroundTasks, FastAPI, Body
 from kafka import KafkaProducer
 
-KAFKA_BOOTSTRAP_SERVERS = os.environ["KAFKA_BOOTSTRAP_SERVERS"]
+# KAFKA_BOOTSTRAP_SERVER = 'oraapex-draft:9092'
+KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
 
 app = FastAPI()
 
-producer = KafkaProducer(bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS)
+producer = KafkaProducer(bootstrap_servers=KAFKA_BOOTSTRAP_SERVER)
 
 
 def put_message(body_json):
