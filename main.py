@@ -1,8 +1,9 @@
 import uvicorn
 import json
 import os
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Security
 from fastapi.responses import JSONResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from kafka import KafkaProducer
 
 try:
@@ -15,6 +16,12 @@ try:
 except KeyError:
     UVICORN_HOST = '127.0.0.1'
 
+try:
+    TOKEN = os.environ["TOKEN"]
+except KeyError:
+    TOKEN = 'test_token'
+
+security = HTTPBearer()
 app = FastAPI()
 
 producer = KafkaProducer(bootstrap_servers=KAFKA_BOOTSTRAP_SERVER)
@@ -26,11 +33,12 @@ async def root():
 
 
 @app.post("/put_message")
-async def message(data=Body()):
+async def message(data=Body(), credentials: HTTPAuthorizationCredentials = Security(security)):
+    if credentials.credentials != TOKEN:
+        return JSONResponse(status_code=401, content="Not authenticated")
     try:
         json_message = json.loads(data.decode('utf-8'))
         topic = json_message.get('topic')
-
         key = json_message.get('key')
 
         if key is not None:
