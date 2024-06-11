@@ -9,7 +9,7 @@ from kafka import KafkaProducer
 try:
     KAFKA_BOOTSTRAP_SERVER = os.environ["KAFKA_BOOTSTRAP_SERVER"]
 except KeyError:
-    KAFKA_BOOTSTRAP_SERVER = ''
+    KAFKA_BOOTSTRAP_SERVER = 'oraapex-draft:9092'
 
 try:
     UVICORN_HOST = os.environ["UVICORN_HOST"]
